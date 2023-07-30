@@ -51,8 +51,6 @@ module.exports = class Auth {
     let signature = '';
     const config = this.config;
 
-    console.log('NAuth', config);
-
     try {
       if (!config) {
         throw new Error('Nathio must take a config object');
@@ -125,8 +123,6 @@ module.exports = class Auth {
   encapsulateData(parameters) {
     const nonce = this.calculateNonce();
     const timestamp = this.calculateTimestamp();
-
-    console.log('Parameters >>> ', parameters);
 
     const data = [
       `oauth_version=${this.version}`,
