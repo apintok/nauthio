@@ -57,50 +57,33 @@ module.exports = class Auth {
 
   /**
    * * Function to separete the Request URL parameters if any;
-   * * Separate the deploy & script parameters;
-   * * Save the url without parameters for encoding later;
+   * * Including the deploy & script parameters;
+   * * Return the url without parameters for encoding later;
    * @param {String} url
    * @returns {Object}
    */
   paramfy(url) {
     let requestParams = url.split('?');
     const newUrl = requestParams[0];
-    requestParams = requestParams[1].split('&');
-
-    const script = requestParams.find((el) => {
-      if (el.includes('script')) {
-        return el;
-      }
-    });
-
-    const deploy = requestParams.find((el) => {
-      if (el.includes('deploy')) return el;
-    });
-
-    const others = requestParams.filter((el) => {
-      if (!el.includes('deploy') && !el.includes('script')) {
-        return el;
-      }
-    });
+    const params = requestParams[1].split('&');
 
     return {
       newUrl,
-      script,
-      deploy,
-      others
+      params
     };
   }
 
   /**
    * * Return the data ordered to be encoded
    * * Is necessary to sort() the parameters alphabetically for encoding
-   * @param {*} parameters
+   * @param {Object} parameters
    * @returns
    */
   encapsulateData(parameters) {
-    let dataString = '';
     const nonce = this.calculateNonce();
     const timestamp = this.calculateTimestamp();
+
+    console.log('Parameters >>> ', parameters);
 
     const data = [
       `oauth_version=${this.version}`,
@@ -120,9 +103,10 @@ module.exports = class Auth {
 
     const arrange = data.sort();
 
-    for (let i = 0; i < arrange.length; i++) {
-      dataString += arrange[i] + '&';
-    }
+    let dataString = arrange.reduce(
+      (acc, currValue) => (acc += currValue + '&'),
+      ''
+    );
     dataString = dataString.slice(0, dataString.length - 1);
 
     return {
