@@ -7,7 +7,11 @@ module.exports = class Auth {
     this.method = 'HMAC-SHA256';
   }
 
-  // Methods
+  // ? Methods
+  /**
+   * * Returns a number string of characters
+   * @returns {String} nonce
+   */
   calculateNonce() {
     let nonce = '';
     const possible =
@@ -19,10 +23,19 @@ module.exports = class Auth {
     return nonce;
   }
 
+  /**
+   * * Returns a UNIX number
+   * @returns {Number} timpestamp
+   */
   calculateTimestamp() {
     return Math.round(+new Date() / 1000);
   }
 
+  /**
+   * * Calculates the signature string based on key and token details
+   * @param {String} baseString 
+   * @returns The encoded signature for the request authentication
+   */
   calculateSignature(baseString) {
     const key = `${this.config.consumerSecret}&${this.config.tokenSecret}`;
     const hmacsha256Data = CryptoJS.HmacSHA256(baseString, key);
@@ -30,6 +43,10 @@ module.exports = class Auth {
     return encodeURIComponent(base64EncodedData);
   }
 
+  /**
+   * * Returns the authentication needed details: signature, timestap & nonce
+   * @returns {Object}
+   */
   getOAuth() {
     const params = this.paramfy(this.config.url);
     const data = this.encapsulateData(params);
@@ -42,6 +59,10 @@ module.exports = class Auth {
     return { signature, timestamp: data.timestamp, nonce: data.nonce };
   }
 
+  /**
+   * * Concates together all the necessary info for the Authentication Header of the request
+   * @returns {String} authHeader
+   */
   buildHeader(timestamp, nonce, signature) {
     let authHeader = `OAuth realm="${this.config.realm}",`;
     authHeader += `oauth_consumer_key="${this.config.consumerKey}",`;
@@ -94,12 +115,7 @@ module.exports = class Auth {
       `oauth_token=${this.config.tokenId}`
     ];
 
-    for (let i = 0; i < parameters.others.length; i++) {
-      data.push(parameters.others[i]);
-    }
-
-    data.push(parameters.deploy);
-    data.push(parameters.script);
+    parameters.params.forEach((param) => data.push(param));
 
     const arrange = data.sort();
 
