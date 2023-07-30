@@ -33,7 +33,7 @@ module.exports = class Auth {
 
   /**
    * * Calculates the signature string based on key and token details
-   * @param {String} baseString 
+   * @param {String} baseString
    * @returns The encoded signature for the request authentication
    */
   calculateSignature(baseString) {
@@ -48,30 +48,52 @@ module.exports = class Auth {
    * @returns {Object}
    */
   getOAuth() {
-    const params = this.paramfy(this.config.url);
-    const data = this.encapsulateData(params);
-    const encodedData = encodeURIComponent(data.dataString);
-    const baseString = `${this.config.action}&${encodeURIComponent(
-      params.newUrl
-    )}&${encodedData}`;
-    const signature = this.calculateSignature(baseString);
+    let signature = '';
+    const config = this.config;
 
-    return { signature, timestamp: data.timestamp, nonce: data.nonce };
+    console.log('NAuth', config);
+
+    try {
+      if (!config) {
+        throw new Error('Nathio must take a config object');
+      } else {
+        for (const key in config) {
+          if (!config[key]) {
+            throw new Error(
+              'Invalid Property Type. Make sure all config Properties are Strings.'
+            );
+          }
+        }
+
+        const params = this.paramfy(config.url);
+        const data = this.encapsulateData(params);
+        const encodedData = encodeURIComponent(data.dataString);
+        const baseString = `${this.config.action}&${encodeURIComponent(
+          params.newUrl
+        )}&${encodedData}`;
+        signature = this.calculateSignature(baseString);
+
+        return { signature, timestamp: data.timestamp, nonce: data.nonce };
+      }
+    } catch (error) {
+      console.error('> NAUTHIO ERROR --> ', error.message);
+    }
   }
 
   /**
    * * Concates together all the necessary info for the Authentication Header of the request
+   * @param {Object} stn signature, timestamp & nonce
    * @returns {String} authHeader
    */
-  buildHeader(timestamp, nonce, signature) {
+  buildHeader(stn) {
     let authHeader = `OAuth realm="${this.config.realm}",`;
     authHeader += `oauth_consumer_key="${this.config.consumerKey}",`;
     authHeader += `oauth_token="${this.config.tokenId}",`;
     authHeader += `oauth_signature_method="${this.method}",`;
-    authHeader += `oauth_timestamp="${timestamp}",`;
-    authHeader += `oauth_nonce="${nonce}",`;
+    authHeader += `oauth_timestamp="${stn.timestamp}",`;
+    authHeader += `oauth_nonce="${stn.nonce}",`;
     authHeader += `oauth_version="${this.version}",`;
-    authHeader += `oauth_signature="${signature}"`;
+    authHeader += `oauth_signature="${stn.signature}"`;
 
     return authHeader;
   }

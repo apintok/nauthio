@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "nodemon package/index.js",
-    "test": "nodemon test/test.js"
+    "dev": "nodemon index.js",
+    "test": "nodemon test/script.js"
   },
   "keywords": [
     "NetSuite",
