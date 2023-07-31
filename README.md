@@ -15,22 +15,18 @@ Requirements:
 
 # Usage
 
-```bash
-    npm install nauthio
-```
-
 Modular include:
 
-```
+```js
     const Nauthio = require('nauthio');
 ```
 
 Build the NetSuite Config Object which contains the authenticaion and request details
 
-```
+```js
     const nsConfig = {
         url: 'https://<account>.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=100&deploy=1',
-        realm: '<ACCOUnT>',
+        realm: '<ACCOUNT>',
         action: 'POST',
         tokenId: '55fe716',
         tokenSecret: '9730db3',
@@ -41,19 +37,19 @@ Build the NetSuite Config Object which contains the authenticaion and request de
 
 Create a new Nauthio instance with the config object
 
-```
+```js
     const auth = new Nauthio(nsConfig);
 ```
 
 Use the method .getOAuth. It'll use the config data
 
-```
+```js
     const oAuth = auth.getOAuth();
 ```
 
 The .buildHeader() methods returns the header
 
-```
+```js
     const header = auth.buildHeader(oAuth);
 
     const authHeader = {
@@ -67,8 +63,13 @@ Pass the header to the respective request.
 # Statistics
 
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/apintok/nauthio)
+
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/apintok/nauthio/main)
+
+![GitHub repo size](https://img.shields.io/github/repo-size/apintok/nauthio)
+
 ![GitHub](https://img.shields.io/github/license/apintok/nauthio)
+
 ![GitHub language count](https://img.shields.io/github/languages/count/apintok/nauthio)
 
 # Social
