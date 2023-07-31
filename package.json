@@ -3,21 +3,18 @@
   "version": "1.0.0",
   "description": "JavaScript Library for NetSuite Auth 1.0",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "dev": "nodemon index.js",
     "test": "nodemon test/script.js"
   },
   "keywords": [
     "NetSuite",
-    "oAuth"
+    "oAuth",
+    "Authentication"
   ],
   "author": "apintok",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.4.0",
     "crypto-js": "^4.1.1"
   },
   "devDependencies": {
