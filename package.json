@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^8.45.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "parcel": "^2.9.3"
   }
 }
