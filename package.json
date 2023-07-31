@@ -1,6 +1,6 @@
 {
   "name": "nauthio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript Library for NetSuite Auth 1.0",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,10 @@
     "oAuth",
     "Authentication"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apintok/nauthio.git"
+  },
   "author": "apintok",
   "license": "ISC",
   "dependencies": {
